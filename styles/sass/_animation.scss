@@ -1,0 +1,43 @@
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-4px);
+  }
+  20% {
+    transform: translateX(4px);
+  }
+  30% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(0);
+  }
+}
+
+.display-enter {
+  opacity: 0;
+  transform: scaleY(0);
+}
+.display-enter-active {
+  opacity: 1;
+  transform-origin: top;
+  transform: scaleY(1);
+  transition: opacity 300ms, transform 300ms;
+}
+.display-exit {
+  opacity: 1;
+}
+.display-exit-active {
+  opacity: 0;
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: opacity 300ms, transform 300ms;
+}
