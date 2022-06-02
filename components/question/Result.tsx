@@ -23,7 +23,7 @@ const Result = ({
   return (
     <div
       className={
-        "rounded-md shadow-md border " +
+        "rounded-md shadow-md border p-2 " +
         (isCorrect ? "bg-green-100" : "bg-red-100")
       }
     >
@@ -31,7 +31,7 @@ const Result = ({
         {isCorrect ? (
           <>
             <CheckCircleIcon className="w-16  text-green-600" />
-            <h4 className="text-green-600 capitalize">
+            <h4 className="text-green-600 text-center capitalize">
               well done! You Selected right answer
             </h4>
           </>
@@ -39,9 +39,8 @@ const Result = ({
           <>
             <ExclamationCircleIcon className="w-16 text-red-600" />
             <h4 className="text-red-600 capitalize">wrong answer!</h4>
-            <h6 className="text-red-600 capitalize">
-              the right answer is{" "}
-              <span className="font-bold">{correctAnswer}</span>
+            <h6 className="text-red-600 text-center capitalize">
+              the right answer is: <p className="font-bold">{correctAnswer}</p>
             </h6>
           </>
         )}

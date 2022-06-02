@@ -22,10 +22,11 @@ interface Inputs {
 }
 
 const AddCard = () => {
-  const [card, setCard] = useState<QuestionCard>({
+  let [card, setCard] = useState<QuestionCard>({
     pictures: [],
     examples: [],
   });
+  const [example, setExample] = React.useState<string>("");
 
   const {
     register,
@@ -34,7 +35,24 @@ const AddCard = () => {
     reset,
   } = useForm<Inputs>();
 
+  function addExample() {
+    console.log("here");
+
+    if (!example) return;
+
+    console.log("after if");
+
+    card.examples!.push({ text: example, id: new Date().getTime() });
+    setCard!(card);
+
+    setExample("");
+  }
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log({ example });
+
+    if (example) addExample();
+    console.log("secound");
     const uploadRes = await uploadImages(
       card.pictures ? card.pictures.map((img) => img.file) : []
     );
@@ -64,7 +82,7 @@ const AddCard = () => {
 
   function clearForm() {
     reset();
-    setCard({});
+    setCard({ examples: [], pictures: [] });
   }
   function addImage(imageFile: any) {
     const image: Picture = {
@@ -96,7 +114,11 @@ const AddCard = () => {
                 {...register("question", { required: true })}
                 error={errors.question && "Question is required"}
               ></TextBox>
-              <AddExample />
+              <AddExample
+                example={example}
+                setExample={setExample}
+                onAdd={addExample}
+              />
             </div>
             <div id="RightSide">
               <TextBox

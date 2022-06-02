@@ -1,30 +1,19 @@
 import TextBox from "@elements/TextBox";
 import { Example, QuestionCard } from "interfaces";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CardContex } from "./AddCard";
 import Examples from "./Examples";
 interface Inputs {
   exampleText: string;
 }
+interface IProps {
+  example: string;
+  setExample: (example: string) => void;
+  onAdd: () => void;
+}
 
-const AddExample = () => {
-  const [example, setExample] = useState<string>("");
-  const { card, setCard } = useContext(CardContex);
-
-  function add() {
-    if (!example) return;
-
-    setCard!({
-      ...card,
-      examples: [
-        ...card!.examples!,
-        { text: example, id: new Date().getTime() },
-      ],
-    });
-
-    setExample("");
-  }
+const AddExample = ({ example, setExample, onAdd }: IProps) => {
   return (
     <div>
       <TextBox
@@ -38,7 +27,7 @@ const AddExample = () => {
           className="h-5 w-5 active:scale-90 cursor-pointer text-violet-600"
           viewBox="0 0 20 20"
           fill="currentColor"
-          onClick={add}
+          onClick={onAdd}
         >
           <path
             fillRule="evenodd"

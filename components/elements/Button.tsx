@@ -8,13 +8,13 @@ const Button = ({ className, children, variant, ...props }: IProps) => {
   const getVariant = () => {
     switch (variant) {
       case "primary":
-        return "bg-violet-500 hover:bg-violet-700 text-white ";
+        return "from-violet-300 to-violet-600 hover:from-violet-600 hover:to-violet-800 text-white";
       case "danger":
         return "bg-red-500 hover:bg-red-700 text-white ";
       case "success":
         return "bg-green-500 hover:bg-green-700 text-white ";
       default:
-        return "bg-violet-500 hover:bg-violet-700 text-white ";
+        return "from-violet-300 to-violet-600 hover:from-violet-600 hover:to-violet-800 text-white ";
     }
   };
 
@@ -25,7 +25,7 @@ const Button = ({ className, children, variant, ...props }: IProps) => {
         className +
         " " +
         getVariant() +
-        " transition font-bold py-2 px-4 rounded-md active:scale-95 "
+        "bg-gradient-to-br transition font-bold py-2 px-4 rounded-md active:scale-95 "
       }
     >
       {children}

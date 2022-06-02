@@ -7,6 +7,8 @@ import AnswerBox from "./AnswerBox";
 import { css } from "@emotion/css";
 import ImageSet from "components/ImageSet";
 import Result from "./Result";
+import Alert from "@elements/Alert";
+import Button from "@elements/Button";
 
 const styles = {
   card: css`
@@ -20,6 +22,7 @@ const QuestionCard = () => {
   const [reveal, setReveal] = React.useState(false);
   let [choices, setChoices] = React.useState<AnswerChoice[]>([]);
   const [selectedChoice, setSelectedChoice] = React.useState<AnswerChoice>();
+  const [show, setShow] = React.useState(false);
 
   useEffect(() => {
     fetchNextWord();
@@ -28,11 +31,15 @@ const QuestionCard = () => {
   async function fetchNextWord() {
     const res = await getApi(`/card/${pot}`);
 
+    if (!res.card) {
+      alert("No more cards");
+      return;
+    }
     card = res.card;
 
     choices = [
       { text: card.answer, isCorrect: true },
-      ...res.wrongAnswer.map((el: any) => ({
+      ...res.wrongAnswers.map((el: any) => ({
         text: el.answer,
         isCorrect: false,
       })),
@@ -77,7 +84,7 @@ const QuestionCard = () => {
             id="front side"
             className={
               "backface-visibility-hidden transition duration-700   absolute w-full " +
-              (reveal ? "-rotateY-180 delay-1000" : "")
+              (reveal ? "-rotateY-180 delay-500" : "")
             }
           >
             <AnswerBox
@@ -91,7 +98,7 @@ const QuestionCard = () => {
             id="back side"
             className={
               "backface-visibility-hidden transition  duration-700 absolute w-full " +
-              (reveal ? "rotateY-0  delay-1000" : "rotateY-180")
+              (reveal ? "rotateY-0  delay-500" : "rotateY-180")
             }
           >
             {selectedChoice && (
@@ -106,6 +113,10 @@ const QuestionCard = () => {
         </div>
       </div>
       {card.pictures && <ImageSet images={card.pictures}></ImageSet>}
+      <div className="flex flex-row-reverse">
+        <Button onClick={() => setShow(!show)}>toggle</Button>
+      </div>
+      <Alert show={show}></Alert>
     </div>
   );
 };
