@@ -11,6 +11,7 @@ interface IProps {
   selectedChoice?: string;
   isCorrect?: boolean;
   correctAnswer: string;
+  synonym?: string;
   onNext: () => void;
 }
 
@@ -18,6 +19,7 @@ const Result = ({
   selectedChoice,
   isCorrect,
   correctAnswer,
+  synonym,
   onNext,
 }: IProps) => {
   return (
@@ -34,6 +36,12 @@ const Result = ({
             <h4 className="text-green-600 text-center capitalize">
               well done! You Selected right answer
             </h4>
+            <h6 className="text-green-600 text-center capitalize">
+              the right answer is: <p className="font-bold">{correctAnswer}</p>
+            </h6>
+            <h6 className="text-green-600 text-center capitalize">
+              synonyms: <p className="font-bold">{correctAnswer}</p>
+            </h6>
           </>
         ) : (
           <>

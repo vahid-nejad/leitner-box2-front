@@ -106,6 +106,7 @@ const QuestionCard = () => {
                 correctAnswer={card.answer!}
                 isCorrect={selectedChoice.isCorrect}
                 selectedChoice={selectedChoice.text}
+                synonym={card.synonym}
                 onNext={nextWord}
               />
             )}
@@ -113,10 +114,16 @@ const QuestionCard = () => {
         </div>
       </div>
       {card.pictures && <ImageSet images={card.pictures}></ImageSet>}
-      <div className="flex flex-row-reverse">
+      <div className="flex flex-row-reverse mt-32">
         <Button onClick={() => setShow(!show)}>toggle</Button>
       </div>
-      <Alert show={show}></Alert>
+      <Alert
+        className="border rounded  p-2 "
+        show={show}
+        onClose={() => setShow(false)}
+      >
+        <p>added</p>
+      </Alert>
     </div>
   );
 };
