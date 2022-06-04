@@ -7,8 +7,7 @@ import AnswerBox from "./AnswerBox";
 import { css } from "@emotion/css";
 import ImageSet from "components/ImageSet";
 import Result from "./Result";
-import Alert from "@elements/Alert";
-import Button from "@elements/Button";
+import { Transition } from "@headlessui/react";
 
 const styles = {
   card: css`
@@ -18,11 +17,15 @@ const styles = {
 
 const QuestionCard = () => {
   let [pot, setPot] = React.useState<number>(0);
-  let [card, setCard] = React.useState<IQuestionCard>({ examples: [] });
+  let [card, setCard] = React.useState<IQuestionCard>({
+    examples: [],
+    pictures: [],
+  });
   const [reveal, setReveal] = React.useState(false);
   let [choices, setChoices] = React.useState<AnswerChoice[]>([]);
   const [selectedChoice, setSelectedChoice] = React.useState<AnswerChoice>();
   const [show, setShow] = React.useState(false);
+  const [wordInPot, setWordInPot] = React.useState<number>(0);
 
   useEffect(() => {
     fetchNextWord();
@@ -46,6 +49,8 @@ const QuestionCard = () => {
     ];
     setChoices(choices.sort(() => Math.random() - 0.5));
     setCard(card);
+    setPot(card.pot!);
+    setWordInPot(res.wordInPot);
     setSelectedChoice(undefined);
   }
 
@@ -78,6 +83,14 @@ const QuestionCard = () => {
         <div id="leftSide">
           <Question questionText={card.question!} onNextCard={nextWord} />
           <ExampleSet examples={card.examples!} />
+          <div className="text-cyan-600 rounded-md shadow border p-2 mt-2 flex justify-between">
+            <p>
+              Pot <span>{card.pot}</span>
+            </p>
+            <p>
+              <span>{wordInPot}</span> word{wordInPot > 1 ? "s" : ""} in the pot{" "}
+            </p>
+          </div>
         </div>
         <div id="RightSide" className={styles.card + " relative w-full "}>
           <div
@@ -107,23 +120,15 @@ const QuestionCard = () => {
                 isCorrect={selectedChoice.isCorrect}
                 selectedChoice={selectedChoice.text}
                 synonym={card.synonym}
+                pot={pot}
                 onNext={nextWord}
               />
             )}
           </div>
         </div>
       </div>
-      {card.pictures && <ImageSet images={card.pictures}></ImageSet>}
-      <div className="flex flex-row-reverse mt-32">
-        <Button onClick={() => setShow(!show)}>toggle</Button>
-      </div>
-      <Alert
-        className="border rounded  p-2 "
-        show={show}
-        onClose={() => setShow(false)}
-      >
-        <p>added</p>
-      </Alert>
+
+      {reveal && <ImageSet images={card.pictures!}></ImageSet>}
     </div>
   );
 };

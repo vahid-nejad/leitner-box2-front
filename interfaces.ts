@@ -19,7 +19,7 @@ export interface QuestionCard {
   answer?: string;
   synonym?: string;
   pictures?: Picture[];
-
+  pot?: number;
   examples?: Example[];
 }
 

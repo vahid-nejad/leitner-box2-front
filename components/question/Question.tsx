@@ -11,7 +11,7 @@ interface IProps {
   onNextCard: () => void;
 }
 const Question = ({ questionText, onNextCard }: IProps) => {
-  useEffect(() => playPronounciation(), []);
+  useEffect(() => playPronounciation(), [questionText]);
   function playPronounciation() {
     if (!questionText) return;
     var audio = new Audio(

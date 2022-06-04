@@ -12,6 +12,7 @@ interface IProps {
   isCorrect?: boolean;
   correctAnswer: string;
   synonym?: string;
+  pot: number;
   onNext: () => void;
 }
 
@@ -20,13 +21,14 @@ const Result = ({
   isCorrect,
   correctAnswer,
   synonym,
+  pot,
   onNext,
 }: IProps) => {
   return (
     <div
       className={
-        "rounded-md shadow-md border p-2 " +
-        (isCorrect ? "bg-green-100" : "bg-red-100")
+        "rounded-md shadow-md border p-2 bg-gradient-to-b " +
+        (isCorrect ? "from-green-100 to-teal-50" : "from-rose-100 to-pink-50")
       }
     >
       <div className="flex flex-col items-center gap-2  p-2">
@@ -39,9 +41,11 @@ const Result = ({
             <h6 className="text-green-600 text-center capitalize">
               the right answer is: <p className="font-bold">{correctAnswer}</p>
             </h6>
-            <h6 className="text-green-600 text-center capitalize">
-              synonyms: <p className="font-bold">{correctAnswer}</p>
-            </h6>
+            {synonym && (
+              <h6 className="text-green-600 text-center capitalize">
+                synonyms: <p className="font-bold">{synonym}</p>
+              </h6>
+            )}
           </>
         ) : (
           <>
@@ -50,8 +54,17 @@ const Result = ({
             <h6 className="text-red-600 text-center capitalize">
               the right answer is: <p className="font-bold">{correctAnswer}</p>
             </h6>
+            {synonym && (
+              <h6 className="text-red-600 text-center capitalize">
+                synonyms: <p className="font-bold">{synonym}</p>
+              </h6>
+            )}
           </>
         )}
+        <p className=" text-purple-600 mt-2">
+          The question {isCorrect ? "promoted" : "demoted"} to pot{" "}
+          <span className="font-bold">{pot}</span>
+        </p>
 
         <Button className="flex justify-between mt-2" onClick={onNext}>
           <span className="capitalize font-thin">Next word</span>
