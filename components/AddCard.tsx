@@ -2,9 +2,10 @@ import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
 import TextBox from "@elements/TextBox";
 import { Picture, QuestionCard } from "interfaces";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { postApi, uploadImages } from "utils/fetchApi";
+import { patchApi, postApi, uploadImages } from "utils/fetchApi";
 import AddExample from "./AddExample";
 import ImageSet from "./ImageSet";
 
@@ -21,12 +22,33 @@ interface Inputs {
   synonym: string;
 }
 
-const AddCard = () => {
-  let [card, setCard] = useState<QuestionCard>({
-    pictures: [],
-    examples: [],
-  });
+interface IProps {
+  editingCard?: QuestionCard;
+}
+
+const AddCard = ({ editingCard }: IProps) => {
+  let [card, setCard] = useState<QuestionCard>(
+    editingCard
+      ? editingCard
+      : {
+          pictures: [],
+          examples: [],
+        }
+  );
+
+  // useEffect(() => {
+  //   if (editingCard) {
+  //     reset({
+  //       question: editingCard.question,
+  //       answer: editingCard.answer,
+  //       synonym: editingCard.synonym,
+  //     });
+  //   }
+  // }, []);
   const [example, setExample] = React.useState<string>("");
+  const deletedImages = useRef<string[]>([]);
+  const addedImages = useRef<Picture[]>([]);
+  const router = useRouter();
 
   const {
     register,
@@ -48,11 +70,44 @@ const AddCard = () => {
     setExample("");
   }
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log({ example });
+  async function edit(data: Inputs) {
+    const uploadRes = await uploadImages(
+      addedImages.current.map((img) => img.file)
+    );
+    const { images } = uploadRes;
 
-    if (example) addExample();
-    console.log("secound");
+    const updatedPics = card.pictures
+      ? card.pictures.map((pic) => {
+          return {
+            id: pic.id,
+            url: pic.url,
+          };
+        })
+      : [];
+    updatedPics.concat(
+      images
+        ? images.map((img: any) => {
+            return { url: img };
+          })
+        : []
+    );
+    console.log({ updatedPics });
+
+    const res = await patchApi(`/card/${card?.id}`, {
+      question: data.question,
+      answer: data.answer,
+      synonym: data.synonym,
+      examples: card.examples
+        ? card.examples!.map((ex) => {
+            return { text: ex.text };
+          })
+        : [],
+
+      pictures: updatedPics,
+    });
+  }
+
+  async function add(data: Inputs) {
     const uploadRes = await uploadImages(
       card.pictures ? card.pictures.map((img) => img.file) : []
     );
@@ -75,6 +130,17 @@ const AddCard = () => {
           })
         : [],
     });
+  }
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (example) addExample();
+    console.log({ editingCard });
+
+    if (editingCard) {
+      await edit(data);
+    } else {
+      await add(data);
+    }
 
     alert("success");
     clearForm();
@@ -83,6 +149,10 @@ const AddCard = () => {
   function clearForm() {
     reset();
     setCard({ examples: [], pictures: [] });
+    if (editingCard) {
+      editingCard = undefined;
+      router.push("/");
+    }
   }
   function addImage(imageFile: any) {
     const image: Picture = {
@@ -112,6 +182,7 @@ const AddCard = () => {
                 lableText="Question"
                 className={"m-2 " + (errors.question && "animate-shake")}
                 {...register("question", { required: true })}
+                defaultValue={editingCard ? editingCard.question : ""}
                 error={errors.question && "Question is required"}
               ></TextBox>
               <AddExample
@@ -125,12 +196,14 @@ const AddCard = () => {
                 lableText="Answer"
                 className={"m-2 " + (errors.answer && "animate-shake")}
                 {...register("answer", { required: true })}
+                defaultValue={editingCard ? editingCard.answer : ""}
                 error={errors.answer && "Answer is required"}
               ></TextBox>
               <TextBox
                 lableText="Synonyms"
                 className={"m-2 "}
                 {...register("synonym")}
+                defaultValue={editingCard ? editingCard.synonym : ""}
               ></TextBox>
               <FileInput
                 className="m-2"
@@ -155,13 +228,14 @@ const AddCard = () => {
           </div>
 
           <Button type="submit" className="m-3">
-            Add
+            {editingCard ? "Update" : "Add"}
           </Button>
         </form>
         {card.pictures && (
           <ImageSet
             onRemove={(id) => removeImage(id)}
             images={card.pictures!}
+            isEditting={editingCard ? true : false}
           ></ImageSet>
         )}
       </div>

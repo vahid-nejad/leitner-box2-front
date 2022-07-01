@@ -11,7 +11,7 @@ export async function postApi(url: string, data: Object) {
   return await response.json();
 }
 export async function patchApi(url: string, data: Object) {
-  console.log(data);
+  console.log({ url });
 
   const response = await fetch(BACKEND_ENDPOINT + url, {
     method: "PATCH",
@@ -30,7 +30,11 @@ export async function getApi(url: string) {
 }
 
 export function getImageUrl(imgName: string) {
-  return `${BACKEND_ENDPOINT}/uploads/${imgName}`;
+  if (imgName.startsWith("blob")) {
+    console.log({ imgName });
+
+    return imgName;
+  } else return `${BACKEND_ENDPOINT}/uploads/${imgName}`;
   // return imgName;
 }
 

@@ -32,7 +32,7 @@ const QuestionCard = () => {
   }, []);
 
   async function fetchNextWord() {
-    const res = await getApi(`/card/${pot}`);
+    const res = await getApi(`/card/pot/${pot}`);
 
     if (!res.card) {
       alert("No more cards");
@@ -56,7 +56,7 @@ const QuestionCard = () => {
 
   function updatePot(pot: number) {
     console.log("updatePot", pot);
-    const res = patchApi(`/card/${card.id}`, {
+    const res = patchApi(`/card/${card.id}/updatePot`, {
       pot: pot,
     });
   }
@@ -79,9 +79,13 @@ const QuestionCard = () => {
   }
   return (
     <div>
-      <div className="grid md:grid-cols-2 gap-2">
+      <div className="grid md:grid-cols-2 gap-2 mb-2">
         <div id="leftSide">
-          <Question questionText={card.question!} onNextCard={nextWord} />
+          <Question
+            questionText={card.question!}
+            questionId={card.id!}
+            onNextCard={nextWord}
+          />
           <ExampleSet examples={card.examples!} />
           <div className="text-cyan-600 rounded-md shadow border p-2 mt-2 flex justify-between">
             <p>
@@ -92,7 +96,7 @@ const QuestionCard = () => {
             </p>
           </div>
         </div>
-        <div id="RightSide" className={styles.card + " relative w-full "}>
+        <div id="RightSide" className={styles.card + " relative w-full h-full"}>
           <div
             id="front side"
             className={
@@ -110,7 +114,7 @@ const QuestionCard = () => {
           <div
             id="back side"
             className={
-              "backface-visibility-hidden transition  duration-700 absolute w-full " +
+              "backface-visibility-hidden transition  duration-700  w-full " +
               (reveal ? "rotateY-0  delay-500" : "rotateY-180")
             }
           >

@@ -21,7 +21,7 @@ const AnswerChoiceBox = ({ choice, index, onCheck, reveal }: IProps) => {
       </div>
       <p
         className={
-          "text-gray-600 col-span-7 p-2 " +
+          "text-gray-600 col-span-7 p-2 text-sm 2xl:text-lg " +
           (reveal && (choice.isCorrect ? "text-green-200" : "text-red-200"))
         }
       >

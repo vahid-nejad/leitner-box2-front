@@ -6,14 +6,20 @@ import { getImageUrl } from "utils/fetchApi";
 interface IProps {
   image: Picture;
   onRemove?: (id: number) => void;
+  isEditting?: boolean;
 }
-const ImageCard = ({ image, onRemove }: IProps) => {
-  console.log("images:" + (onRemove ? image.url : getImageUrl(image.url)));
-
+const ImageCard = ({ image, onRemove, isEditting }: IProps) => {
   return (
     <div className="border rounded-md shadow-md relative">
       <Image
-        src={onRemove ? image.url : getImageUrl(image.url)}
+        src={
+          getImageUrl(image.url)
+          // onRemove
+          //   ? isEditting
+          //     ? getImageUrl(image.url)
+          //     : image.url
+          //   : getImageUrl(image.url)
+        }
         width={400}
         height={400}
         className="object-contain"

@@ -2,16 +2,20 @@ import React, { useEffect } from "react";
 import {
   SpeakerphoneIcon,
   ChevronDoubleRightIcon,
+  PencilIcon,
 } from "@heroicons/react/solid";
 import ToolTip from "@elements/ToolTip";
 import { getImageUrl } from "utils/fetchApi";
+import { useRouter } from "next/router";
 
 interface IProps {
   questionText: string;
+  questionId: number;
   onNextCard: () => void;
 }
-const Question = ({ questionText, onNextCard }: IProps) => {
+const Question = ({ questionText, onNextCard, questionId }: IProps) => {
   useEffect(() => playPronounciation(), [questionText]);
+  const router = useRouter();
   function playPronounciation() {
     if (!questionText) return;
     var audio = new Audio(
@@ -40,6 +44,10 @@ const Question = ({ questionText, onNextCard }: IProps) => {
           onClick={onNextCard}
           className="w-4 text-green-600 cursor-pointer"
         ></ChevronDoubleRightIcon>
+        <PencilIcon
+          className="w-4 text-fuchsia-600 cursor-pointer"
+          onClick={() => router.push(`/edit/${questionId}`)}
+        ></PencilIcon>
       </div>
     </div>
   );

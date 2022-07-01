@@ -3,6 +3,7 @@ import {
   DocumentAddIcon,
   HomeIcon,
   ChartBarIcon,
+  SearchCircleIcon,
 } from "@heroicons/react/solid";
 
 import Link from "next/link";
@@ -31,6 +32,14 @@ const NavBar = () => {
           <div className="mx-2 flex flex-col items-center hover:scale-105 hover:text-fuchsia-500 transition cursor-pointer text-violet-700 ">
             <ChartBarIcon className="w-5 " />
             <span className="capitalize ">Statistics</span>
+          </div>
+        </a>
+      </Link>
+      <Link passHref href={"/search"}>
+        <a>
+          <div className="mx-2 flex flex-col items-center hover:scale-105 hover:text-fuchsia-500 transition cursor-pointer text-violet-700 ">
+            <SearchCircleIcon className="w-5 " />
+            <span className="capitalize ">Search</span>
           </div>
         </a>
       </Link>
