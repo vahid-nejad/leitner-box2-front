@@ -11,7 +11,7 @@ interface IProps {
 const ImageCard = ({ image, onRemove, isEditting }: IProps) => {
   return (
     <div className="border rounded-md shadow-md relative">
-      <Image
+      <img
         src={
           getImageUrl(image.url)
           // onRemove
@@ -20,9 +20,7 @@ const ImageCard = ({ image, onRemove, isEditting }: IProps) => {
           //     : image.url
           //   : getImageUrl(image.url)
         }
-        width={400}
-        height={400}
-        className="object-contain"
+        className="object-contain w-96 h-96"
       />
       {onRemove && (
         <TrashIcon

@@ -1,11 +1,12 @@
 import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
 import TextBox from "@elements/TextBox";
+import { PencilIcon } from "@heroicons/react/solid";
 import { Picture, QuestionCard } from "interfaces";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { patchApi, postApi, uploadImages } from "utils/fetchApi";
+import { getApi, patchApi, postApi, uploadImages } from "utils/fetchApi";
 import AddExample from "./AddExample";
 import ImageSet from "./ImageSet";
 
@@ -46,7 +47,9 @@ const AddCard = ({ editingCard }: IProps) => {
   //   }
   // }, []);
   const [example, setExample] = React.useState<string>("");
-  const deletedImages = useRef<string[]>([]);
+  const [duplicationResult, setDuplicationResult] =
+    React.useState<boolean>(false);
+
   const addedImages = useRef<Picture[]>([]);
   const router = useRouter();
 
@@ -55,6 +58,7 @@ const AddCard = ({ editingCard }: IProps) => {
     handleSubmit,
     formState: { errors },
     reset,
+    getValues,
   } = useForm<Inputs>();
 
   function addExample() {
@@ -172,6 +176,13 @@ const AddCard = ({ editingCard }: IProps) => {
     });
   }
 
+  async function checkForDuplication() {
+    const result = await getApi(
+      `/card/checkForDuplication/${getValues().question}`
+    );
+    setDuplicationResult(result);
+  }
+
   return (
     <CardContex.Provider value={{ card, setCard }}>
       <div>
@@ -184,7 +195,17 @@ const AddCard = ({ editingCard }: IProps) => {
                 {...register("question", { required: true })}
                 defaultValue={editingCard ? editingCard.question : ""}
                 error={errors.question && "Question is required"}
+                onBlur={checkForDuplication}
               ></TextBox>
+              {duplicationResult && (
+                <div className="m-2 flex">
+                  <p className="text-red-600 mr-2">Question already exists</p>
+                  <p className="text-red-600 hover:text-blue-600 cursor-pointer flex items-center">
+                    Edit Question
+                    <PencilIcon className="h-4 w-4 ml-2" />
+                  </p>
+                </div>
+              )}
               <AddExample
                 example={example}
                 setExample={setExample}
