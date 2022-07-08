@@ -6,6 +6,10 @@ import { getApi } from "utils/fetchApi";
 
 export async function getServerSideProps({ params }: any) {
   // Fetch data from external API
+  if (params.id == "last") {
+    const card = await getApi(`/card/getLastCard/last`);
+    return { props: { card } };
+  }
   const card = await getApi(`/card/${params.id}`);
 
   // Pass data to the page via props

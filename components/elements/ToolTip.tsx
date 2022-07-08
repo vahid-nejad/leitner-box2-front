@@ -29,7 +29,7 @@ const Text = ({ children, className, position }: ITextProps) => {
   }
   return (
     <div
-      className={`absolute  opacity-0 p-1 transition  bg-white rounded-lg  border  group-hover:opacity-100   ${className} ${getClassName()}`}
+      className={`absolute  opacity-0 p-1 transition  bg-white rounded-lg  border  group-hover:opacity-100    ${getClassName()} ${className}`}
     >
       {children}
     </div>

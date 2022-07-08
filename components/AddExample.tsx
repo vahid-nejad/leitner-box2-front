@@ -21,6 +21,7 @@ const AddExample = ({ example, setExample, onAdd }: IProps) => {
         className={"m-2 "}
         value={example}
         onChange={(e) => setExample(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && onAdd()}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

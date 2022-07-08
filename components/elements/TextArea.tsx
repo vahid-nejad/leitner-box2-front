@@ -1,11 +1,11 @@
 import React from "react";
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   lableText?: string;
   error?: string;
   children?: React.ReactNode;
 }
 
-const TextBox = React.forwardRef<HTMLInputElement, IProps>(
+const TextArea = React.forwardRef<HTMLTextAreaElement, IProps>(
   ({ className, children, lableText, error, ...props }, ref) => {
     return (
       <div className={className + " relative"}>
@@ -15,16 +15,15 @@ const TextBox = React.forwardRef<HTMLInputElement, IProps>(
           </label>
         )}
         <div className="flex items-center">
-          <input
+          <textarea
             id="txt"
             className={
               "border w-full block outline-none py-2 px-1  text-sm lg:text-lg rounded-md bg-slate-50 focus:outline-violet-600  " +
               (error && "border-red-500 border ")
             }
             {...props}
-            type={"text"}
             ref={ref}
-          ></input>
+          ></textarea>
 
           <div className="-ml-7">{children}</div>
         </div>
@@ -34,4 +33,4 @@ const TextBox = React.forwardRef<HTMLInputElement, IProps>(
   }
 );
 
-export default TextBox;
+export default TextArea;

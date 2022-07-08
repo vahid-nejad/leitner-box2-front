@@ -1,5 +1,6 @@
 import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
+import TextArea from "@elements/TextArea";
 import TextBox from "@elements/TextBox";
 import { PencilIcon } from "@heroicons/react/solid";
 import { Picture, QuestionCard } from "interfaces";
@@ -47,8 +48,10 @@ const AddCard = ({ editingCard }: IProps) => {
   //   }
   // }, []);
   const [example, setExample] = React.useState<string>("");
-  const [duplicationResult, setDuplicationResult] =
-    React.useState<boolean>(false);
+  const [duplicationResult, setDuplicationResult] = React.useState<{
+    isDuplicate: boolean;
+    id: number;
+  }>({ isDuplicate: false, id: 0 });
 
   const addedImages = useRef<Picture[]>([]);
   const router = useRouter();
@@ -186,7 +189,12 @@ const AddCard = ({ editingCard }: IProps) => {
   return (
     <CardContex.Provider value={{ card, setCard }}>
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) =>
+            e.key === "Enter" && !e.shiftKey && e.preventDefault()
+          }
+        >
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div id="leftSide">
               <TextBox
@@ -195,12 +203,15 @@ const AddCard = ({ editingCard }: IProps) => {
                 {...register("question", { required: true })}
                 defaultValue={editingCard ? editingCard.question : ""}
                 error={errors.question && "Question is required"}
-                onBlur={checkForDuplication}
+                onBlur={() => !editingCard && checkForDuplication()}
               ></TextBox>
-              {duplicationResult && (
+              {duplicationResult.isDuplicate && (
                 <div className="m-2 flex">
                   <p className="text-red-600 mr-2">Question already exists</p>
-                  <p className="text-red-600 hover:text-blue-600 cursor-pointer flex items-center">
+                  <p
+                    className="text-red-600 hover:text-blue-600 cursor-pointer flex items-center"
+                    onClick={() => router.push(`/edit/${duplicationResult.id}`)}
+                  >
                     Edit Question
                     <PencilIcon className="h-4 w-4 ml-2" />
                   </p>
@@ -220,12 +231,14 @@ const AddCard = ({ editingCard }: IProps) => {
                 defaultValue={editingCard ? editingCard.answer : ""}
                 error={errors.answer && "Answer is required"}
               ></TextBox>
-              <TextBox
+              <TextArea
                 lableText="Synonyms"
                 className={"m-2 "}
                 {...register("synonym")}
                 defaultValue={editingCard ? editingCard.synonym : ""}
-              ></TextBox>
+                rows={3}
+                cols={50}
+              ></TextArea>
               <FileInput
                 className="m-2"
                 onChange={(e) => e.target.files && addImage(e.target.files[0])}
