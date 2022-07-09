@@ -7,6 +7,7 @@ import {
 import ToolTip from "@elements/ToolTip";
 import { getImageUrl } from "utils/fetchApi";
 import { useRouter } from "next/router";
+import { playPronounciation } from "utils/utillties";
 
 interface IProps {
   questionText: string;
@@ -14,21 +15,8 @@ interface IProps {
   onNextCard: () => void;
 }
 const Question = ({ questionText, onNextCard, questionId }: IProps) => {
-  useEffect(() => playPronounciation(), [questionText]);
+  useEffect(() => playPronounciation(questionText), [questionText]);
   const router = useRouter();
-  function playPronounciation() {
-    if (!questionText) return;
-    var audio = new Audio(
-      `http://ssl.gstatic.com/dictionary/static/sounds/oxford/${questionText.trim()}--_us_1.mp3`
-    );
-
-    if (
-      audio.canPlayType("audio/mp3") === "probably" ||
-      audio.canPlayType("audio/mp3") === "maybe"
-    ) {
-      audio.play();
-    }
-  }
 
   return (
     <div className="border rounded shadow p-2 flex justify-between">
@@ -37,7 +25,7 @@ const Question = ({ questionText, onNextCard, questionId }: IProps) => {
       </p>
       <div className="flex gap-3">
         <SpeakerphoneIcon
-          onClick={playPronounciation}
+          onClick={() => playPronounciation(questionText)}
           className="w-4 text-fuchsia-600 cursor-pointer"
         />
         <ChevronDoubleRightIcon

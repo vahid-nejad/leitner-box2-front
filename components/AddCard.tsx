@@ -2,12 +2,13 @@ import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
 import TextArea from "@elements/TextArea";
 import TextBox from "@elements/TextBox";
-import { PencilIcon } from "@heroicons/react/solid";
+import { PencilIcon, SpeakerphoneIcon } from "@heroicons/react/solid";
 import { Picture, QuestionCard } from "interfaces";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getApi, patchApi, postApi, uploadImages } from "utils/fetchApi";
+import { playPronounciation } from "utils/utillties";
 import AddExample from "./AddExample";
 import ImageSet from "./ImageSet";
 
@@ -204,7 +205,12 @@ const AddCard = ({ editingCard }: IProps) => {
                 defaultValue={editingCard ? editingCard.question : ""}
                 error={errors.question && "Question is required"}
                 onBlur={() => !editingCard && checkForDuplication()}
-              ></TextBox>
+              >
+                <SpeakerphoneIcon
+                  onClick={() => playPronounciation(getValues().question)}
+                  className="w-4 text-fuchsia-600 cursor-pointer"
+                />
+              </TextBox>
               {duplicationResult.isDuplicate && (
                 <div className="m-2 flex">
                   <p className="text-red-600 mr-2">Question already exists</p>
