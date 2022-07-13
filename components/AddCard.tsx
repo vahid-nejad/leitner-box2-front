@@ -2,7 +2,12 @@ import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
 import TextArea from "@elements/TextArea";
 import TextBox from "@elements/TextBox";
-import { PencilIcon, SpeakerphoneIcon } from "@heroicons/react/solid";
+import ToolTip from "@elements/ToolTip";
+import {
+  PencilIcon,
+  SpeakerphoneIcon,
+  SwitchVerticalIcon,
+} from "@heroicons/react/solid";
 import { Picture, QuestionCard } from "interfaces";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
@@ -102,7 +107,7 @@ const AddCard = ({ editingCard }: IProps) => {
     console.log({ updatedPics });
 
     const res = await patchApi(`/card/${card?.id}`, {
-      question: data.question,
+      question: data.question.toLocaleLowerCase().trim(),
       answer: data.answer,
       synonym: data.synonym,
       examples: card.examples
@@ -123,7 +128,7 @@ const AddCard = ({ editingCard }: IProps) => {
     const { images } = uploadRes;
 
     const res = await postApi("/card", {
-      question: data.question,
+      question: data.question.toLocaleLowerCase().trim(),
       answer: data.answer,
       synonym: data.synonym,
       examples: card.examples
@@ -155,21 +160,26 @@ const AddCard = ({ editingCard }: IProps) => {
   };
 
   function clearForm() {
-    reset();
+    reset({
+      question: "",
+      answer: "",
+      synonym: "",
+    });
+
     setCard({ examples: [], pictures: [] });
     if (editingCard) {
       editingCard = undefined;
       router.push("/");
     }
   }
-  function addImage(imageFile: any) {
-    const image: Picture = {
-      id: new Date().getTime(),
-      url: URL.createObjectURL(imageFile),
-      file: imageFile,
-    };
+  function addImage(imageFiles: FileList) {
+    const images: Picture[] = Array.from(imageFiles).map((file, index) => ({
+      id: new Date().getTime() + index,
+      url: URL.createObjectURL(file),
+      file: file,
+    }));
 
-    setCard({ ...card, pictures: [...card.pictures!, image] });
+    setCard({ ...card, pictures: [...card.pictures!, ...images] });
     console.log(card);
   }
 
@@ -182,9 +192,18 @@ const AddCard = ({ editingCard }: IProps) => {
 
   async function checkForDuplication() {
     const result = await getApi(
-      `/card/checkForDuplication/${getValues().question}`
+      `/card/checkForDuplication/${getValues().question.toLowerCase().trim()}`
     );
     setDuplicationResult(result);
+  }
+
+  function exchange() {
+    const { question, answer, synonym } = getValues();
+    reset({
+      question: question,
+      answer: synonym,
+      synonym: answer,
+    });
   }
 
   return (
@@ -236,7 +255,12 @@ const AddCard = ({ editingCard }: IProps) => {
                 {...register("answer", { required: true })}
                 defaultValue={editingCard ? editingCard.answer : ""}
                 error={errors.answer && "Answer is required"}
-              ></TextBox>
+              >
+                <SwitchVerticalIcon
+                  onClick={exchange}
+                  className="w-4 cursor-pointer text-violet-600"
+                />
+              </TextBox>
               <TextArea
                 lableText="Synonyms"
                 className={"m-2 "}
@@ -247,23 +271,10 @@ const AddCard = ({ editingCard }: IProps) => {
               ></TextArea>
               <FileInput
                 className="m-2"
-                onChange={(e) => e.target.files && addImage(e.target.files[0])}
+                onChange={(e) => e.target.files && addImage(e.target.files)}
                 lablText="Choose Image"
+                multiple={true}
               ></FileInput>
-              {/* <FileInput
-                className="m-2"
-                onChange={(e) =>
-                  e.target.files && pronounceChanged(e.target.files[0])
-                }
-                lablText="Choose Pronounciation"
-              ></FileInput> */}
-              {/* <Button
-                type="button"
-                onClick={playPronounciation}
-                className="m-2"
-              >
-                Play Pronounciation
-              </Button> */}
             </div>
           </div>
 

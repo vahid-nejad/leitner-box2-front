@@ -24,6 +24,13 @@ const Result = ({
   pot,
   onNext,
 }: IProps) => {
+  const renderSynonyms = () => (
+    <ol>
+      {synonym &&
+        synonym.split("\n").map((syn, index) => <li key={index}>{syn}</li>)}
+    </ol>
+  );
+
   return (
     <div
       className={
@@ -43,8 +50,8 @@ const Result = ({
             </h6>
             {synonym && (
               <h6 className="text-green-600 text-center capitalize">
-                synonyms:{" "}
-                <p className="font-bold whitespace-pre-wrap">{synonym}</p>
+                synonyms: {renderSynonyms()}
+                {/* <p className="font-bold whitespace-pre-wrap">{synonym}</p> */}
               </h6>
             )}
           </>
@@ -57,8 +64,8 @@ const Result = ({
             </h6>
             {synonym && (
               <h6 className="text-red-600 text-center capitalize">
-                synonyms:{" "}
-                <p className="font-bold whitespace-pre-wrap">{synonym}</p>
+                synonyms: {renderSynonyms()}
+                {/* <p className="font-bold whitespace-pre-wrap">{synonym}</p> */}
               </h6>
             )}
           </>

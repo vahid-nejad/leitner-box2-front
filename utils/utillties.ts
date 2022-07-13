@@ -4,10 +4,5 @@ export function playPronounciation(questionText: string) {
     `http://ssl.gstatic.com/dictionary/static/sounds/oxford/${questionText.trim()}--_us_1.mp3`
   );
 
-  if (
-    audio.canPlayType("audio/mp3") === "probably" ||
-    audio.canPlayType("audio/mp3") === "maybe"
-  ) {
-    audio.play();
-  }
+  audio.play().catch((err) => console.log(err));
 }
