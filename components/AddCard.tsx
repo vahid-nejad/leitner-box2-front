@@ -59,7 +59,6 @@ const AddCard = ({ editingCard }: IProps) => {
     id: number;
   }>({ isDuplicate: false, id: 0 });
 
-  const addedImages = useRef<Picture[]>([]);
   const router = useRouter();
 
   const {
@@ -84,27 +83,32 @@ const AddCard = ({ editingCard }: IProps) => {
   }
 
   async function edit(data: Inputs) {
-    const uploadRes = await uploadImages(
-      addedImages.current.map((img) => img.file)
-    );
+    const addedImages = card.pictures
+      ?.filter((img) => img.file)
+      .map((img) => img.file);
+    const uploadRes = await uploadImages(addedImages ? addedImages : []);
     const { images } = uploadRes;
 
     const updatedPics = card.pictures
-      ? card.pictures.map((pic) => {
-          return {
-            id: pic.id,
-            url: pic.url,
-          };
-        })
-      : [];
-    updatedPics.concat(
-      images
-        ? images.map((img: any) => {
-            return { url: img };
+      ? card.pictures
+          .filter((img) => !img.file)
+          .map((pic) => {
+            return {
+              id: pic.id,
+              url: pic.url,
+            };
           })
-        : []
+      : [];
+
+    images.forEach((imgUrl: string) => {
+      updatedPics.push({ id: undefined, url: imgUrl });
+    });
+    console.log(
+      "images",
+      images.map((img: string) => {
+        return { url: img };
+      })
     );
-    console.log({ updatedPics });
 
     const res = await patchApi(`/card/${card?.id}`, {
       question: data.question.toLocaleLowerCase().trim(),

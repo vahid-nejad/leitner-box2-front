@@ -12,6 +12,7 @@ const AnswerChoiceBox = ({ choice, index, onCheck, reveal }: IProps) => {
     const answers = choice.text
       .replace("||", "\n")
       .replace(";", "\n")
+      .replace("||", "\n")
       .split("\n");
     return (
       <ol
@@ -38,8 +39,8 @@ const AnswerChoiceBox = ({ choice, index, onCheck, reveal }: IProps) => {
         (reveal && (choice.isCorrect ? "bg-green-600" : "bg-red-600"))
       }
     >
-      <div className="bg-cyan-50 w-9 ">
-        <p className="p-2 text-center ">{index + 1}</p>
+      <div className="bg-cyan-50 w-9 flex items-center justify-center">
+        <p className="p-2  ">{index + 1}</p>
       </div>
       {renderAnswer()}
     </div>

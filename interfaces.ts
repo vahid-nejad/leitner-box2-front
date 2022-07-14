@@ -4,7 +4,7 @@ export interface Example {
 }
 
 export interface Picture {
-  id: number;
+  id?: number;
   url: string;
   file?: any;
 }

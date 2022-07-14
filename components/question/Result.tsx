@@ -24,12 +24,39 @@ const Result = ({
   pot,
   onNext,
 }: IProps) => {
-  const renderSynonyms = () => (
-    <ol>
-      {synonym &&
-        synonym.split("\n").map((syn, index) => <li key={index}>{syn}</li>)}
-    </ol>
-  );
+  const renderSynonyms = () => {
+    if (!synonym) return "";
+    const synonyms = synonym
+      .replace("||", "\n")
+      .replace("||", "\n")
+      .replace(";", "\n")
+      .split("\n");
+
+    return (
+      <ol className={synonyms.length > 1 ? "list-disc text-left" : ""}>
+        {synonyms.map((syn, index) => (
+          <li key={index}>{syn}</li>
+        ))}
+      </ol>
+    );
+  };
+
+  const renderAnswer = () => {
+    const answers = correctAnswer
+      .replace("||", "\n")
+      .replace(";", "\n")
+      .replace("||", "\n")
+      .split("\n");
+    return (
+      <ol className={answers.length > 1 ? "list-disc text-left" : ""}>
+        {answers.map((answer, index) => (
+          <li className="p-0 font-bold" key={index}>
+            {answer.trim()}
+          </li>
+        ))}
+      </ol>
+    );
+  };
 
   return (
     <div
@@ -46,13 +73,17 @@ const Result = ({
               well done! You Selected right answer
             </h4>
             <h6 className="text-green-600 text-center capitalize">
-              the right answer is: <p className="font-bold">{correctAnswer}</p>
+              the right answer is:
+              {renderAnswer()}
             </h6>
             {synonym && (
-              <h6 className="text-green-600 text-center capitalize">
-                synonyms: {renderSynonyms()}
-                {/* <p className="font-bold whitespace-pre-wrap">{synonym}</p> */}
-              </h6>
+              <>
+                <h6 className="text-green-600 text-center capitalize">
+                  {/* <p className="font-bold whitespace-pre-wrap">{synonym}</p> */}
+                  synonyms:
+                  {renderSynonyms()}
+                </h6>
+              </>
             )}
           </>
         ) : (
@@ -60,7 +91,7 @@ const Result = ({
             <ExclamationCircleIcon className="w-16 text-red-600" />
             <h4 className="text-red-600 capitalize">wrong answer!</h4>
             <h6 className="text-red-600 text-center capitalize">
-              the right answer is: <p className="font-bold">{correctAnswer}</p>
+              the right answer is: {renderAnswer()}
             </h6>
             {synonym && (
               <h6 className="text-red-600 text-center capitalize">
