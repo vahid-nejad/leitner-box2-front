@@ -10,7 +10,10 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, IProps>(
     return (
       <div className={className + " relative"}>
         {lableText && (
-          <label className="block text-gray-600  mb-2" htmlFor="txt">
+          <label
+            className="block text-gray-600 text-xs lg:text-sm xl:text-base mb-2"
+            htmlFor="txt"
+          >
             {lableText}
           </label>
         )}
@@ -18,7 +21,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, IProps>(
           <textarea
             id="txt"
             className={
-              "border w-full block outline-none py-2 px-1  text-sm lg:text-lg rounded-md bg-slate-50 focus:outline-violet-600  " +
+              "border w-full block outline-none py-2 px-1  text-xs lg:text-sm xl:text-base rounded-md bg-slate-50 focus:outline-violet-600  " +
               (error && "border-red-500 border ")
             }
             {...props}

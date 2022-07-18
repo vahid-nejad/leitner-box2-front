@@ -195,9 +195,9 @@ const AddCard = ({ editingCard }: IProps) => {
   }
 
   async function checkForDuplication() {
-    const result = await getApi(
-      `/card/checkForDuplication/${getValues().question.toLowerCase().trim()}`
-    );
+    const questionText = getValues().question.toLocaleLowerCase().trim();
+    if (!questionText) return;
+    const result = await getApi(`/card/checkForDuplication/${questionText}`);
     setDuplicationResult(result);
   }
 

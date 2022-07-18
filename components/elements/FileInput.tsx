@@ -22,7 +22,10 @@ const FileInput = ({
   return (
     <div className={className}>
       {lablText && (
-        <label className="block text-gray-600  mb-2" htmlFor="txt">
+        <label
+          className="block text-gray-600 text-xs lg:text-sm xl:text-base mb-2"
+          htmlFor="txt"
+        >
           {lablText}
         </label>
       )}
