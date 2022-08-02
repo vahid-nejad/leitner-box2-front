@@ -2,7 +2,7 @@ import Button from "@elements/Button";
 import FileInput from "@elements/FileInput";
 import TextArea from "@elements/TextArea";
 import TextBox from "@elements/TextBox";
-import ToolTip from "@elements/ToolTip";
+
 import {
   PencilIcon,
   SpeakerphoneIcon,
@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import { Picture, QuestionCard } from "interfaces";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getApi, patchApi, postApi, uploadImages } from "utils/fetchApi";
 import { playPronounciation } from "utils/utillties";
@@ -44,15 +44,6 @@ const AddCard = ({ editingCard }: IProps) => {
         }
   );
 
-  // useEffect(() => {
-  //   if (editingCard) {
-  //     reset({
-  //       question: editingCard.question,
-  //       answer: editingCard.answer,
-  //       synonym: editingCard.synonym,
-  //     });
-  //   }
-  // }, []);
   const [example, setExample] = React.useState<string>("");
   const [duplicationResult, setDuplicationResult] = React.useState<{
     isDuplicate: boolean;
@@ -173,7 +164,7 @@ const AddCard = ({ editingCard }: IProps) => {
     setCard({ examples: [], pictures: [] });
     if (editingCard) {
       editingCard = undefined;
-      router.push("/");
+      router.back();
     }
   }
   function addImage(imageFiles: FileList) {

@@ -25,9 +25,8 @@ const Stat: NextPage = () => {
 
         <div className="border-b border-t">
           {wordCounts.map((el: number, index: number) => (
-            <div className="grid grid-cols-7 ">
+            <div key={el} className="grid grid-cols-7 ">
               <p
-                key={index}
                 className={
                   (el >= potSize[index] ? "text-cyan-600 " : "") +
                   " p-2 col-span-2"

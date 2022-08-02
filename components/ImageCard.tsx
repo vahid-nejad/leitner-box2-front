@@ -25,7 +25,7 @@ const ImageCard = ({ image, onRemove, isEditting }: IProps) => {
       {onRemove && (
         <TrashIcon
           className="h-6 w-6 md:absolute md:bottom-2 md:left-1/2 md:-translate-x-1/2 text-red-500 transition cursor-pointer hover:scale-105 active:scale-90"
-          onClick={() => onRemove && onRemove(image.id)}
+          onClick={() => onRemove && onRemove(image.id!)}
         ></TrashIcon>
       )}
     </div>
